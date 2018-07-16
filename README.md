@@ -2,6 +2,7 @@ TinySelect
 ==========
 
 [![Build Status](https://travis-ci.org/McFizh/tinySelect.svg?branch=master)](https://travis-ci.org/McFizh/tinySelect)
+[![Known Vulnerabilities](https://snyk.io/test/github/McFizh/tinySelect.git/badge.svg)](https://snyk.io/test/github/McFizh/tinySelect.git)
 
 Tiny jquery select component with ajax on demand loading and filtering.
 
