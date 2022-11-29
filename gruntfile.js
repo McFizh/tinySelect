@@ -3,7 +3,7 @@ module.exports = function(grunt){
 
   // ----------------------------------------------------
   grunt.initConfig({
-	pkg: grunt.file.readJSON('package.json'),
+    pkg: grunt.file.readJSON("package.json"),
 
     clean: {
       dist: ["dist"]
@@ -12,17 +12,17 @@ module.exports = function(grunt){
     uglify: {
       options: {
         preserveComments: false,
-		banner: "/*\n" +
-			" * tinySelect ( http://mcfizh.github.io/tinySelect/ )\n" +
-			" *\n" +
-			" * Licensed under MIT license.\n" +
-			" *\n" +
-			" * @version <%= pkg.version %>\n" +
-			" * @author Pekka Harjamäki\n" +
-			" */"
+        banner: "/*\n" +
+          " * tinySelect ( http://mcfizh.github.io/tinySelect/ )\n" +
+          " *\n" +
+          " * Licensed under MIT license.\n" +
+          " *\n" +
+          " * @version <%= pkg.version %>\n" +
+          " * @author Pekka Harjamäki\n" +
+          " */"
       },
       main: {
-        src: "js/tinyselect.js",
+        src: "src/tinyselect.js",
         dest: "dist/js/tinyselect.min.js"
       }
     },
@@ -30,19 +30,15 @@ module.exports = function(grunt){
     copy: {
       css: {
         expand: true,
+        cwd: "src/",
         src: "css/*",
-        dest: "dist/",
+        dest: "dist",
         filter: "isFile"
       }
     },
-
-	jshint: {
-		all: [ "gruntfile.js", "js/tinyselect.js" ]
-	},
-
-	qunit: {
-		all: [ "tests/*.html" ]
-	}
+    qunit: {
+      all: [ "tests/*.test.html" ]
+    }
   });
 
   // ----------------------------------------------------
@@ -50,9 +46,8 @@ module.exports = function(grunt){
   grunt.loadNpmTasks( "grunt-contrib-uglify" );
   grunt.loadNpmTasks( "grunt-contrib-copy" );
   grunt.loadNpmTasks( "grunt-contrib-qunit" );
-  grunt.loadNpmTasks( "grunt-contrib-jshint" );
 
   // ----------------------------------------------------
   grunt.registerTask( "default", [ "clean:dist", "uglify:main", "copy:css" ] );
-  grunt.registerTask( "test", [ "jshint:all", "qunit:all" ] );
+  grunt.registerTask( "test", [ "qunit:all" ] );
 };

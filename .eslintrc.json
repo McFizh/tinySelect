@@ -1,0 +1,19 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2020": true,
+        "jquery": true,
+        "qunit": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "semi": ["error", "always"],
+        "quotes": ["error", "double"],
+        "eqeqeq": ["error", "always"],
+        "indent": ["error", 2]
+    }
+}

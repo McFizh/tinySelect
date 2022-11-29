@@ -1,3 +1,15 @@
+## 2.0.0 (30.11.2022)
+
+Code cleanup:
+
+- Dropped support for jquery 1
+- Added qunit test for latest jquery 3.6 and previous 3.5
+- Updated grunt & qunit packages
+- Replaced jshint with eslint
+- Updated travis node version from 8 to 14
+- Added http-server page so that demo can be easily started
+- Moved source files to src directory
+
 ## 1.0.6 (16.7.2018)
 
 Code cleanup:

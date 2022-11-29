@@ -4,7 +4,7 @@ TinySelect
 [![Build Status](https://travis-ci.org/McFizh/tinySelect.svg?branch=master)](https://travis-ci.org/McFizh/tinySelect)
 [![Known Vulnerabilities](https://snyk.io/test/github/McFizh/tinySelect.git/badge.svg)](https://snyk.io/test/github/McFizh/tinySelect.git)
 
-Tiny jquery select component with ajax on demand loading and filtering.
+Tiny and zero-dependency jquery select component with ajax on demand loading and filtering. Supports jQuery versions 2 and 3
 
 ### Construction options:
 
@@ -30,11 +30,18 @@ $("#selectElementId").tinyselect({
 
 Plugin expects data to be array of objects. Each object should contain attributes 'val' and 'text'. Object can also contain attributes 'selected: true', which selects the element.
 
+### Testing plugin locally
+
+You can test the plugins demo page with included http server:
+
+* npm ci
+* npm run demoserver
+
 ### Compiling the plugin from source
 
 Run the following commands:
 
-* npm install
-* grunt test
+* npm ci
+* npm run test
   * This step is optional
-* grunt
+* npx grunt

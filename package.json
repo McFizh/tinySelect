@@ -1,9 +1,9 @@
 {
   "name": "tinyselect",
   "description": "jQuery plugin to create custom select element. Supports ajax loading and filtering.",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "author": "Pekka Harjamäki <mcfizh@gmail.com>",
-  "homepage": "http://mcfizh.github.io/tinySelect/",
+  "homepage": "https://mcfizh.github.io/tinySelect/",
   "license": "MIT",
   "keywords": [
     "select",
@@ -12,18 +12,25 @@
     "jquery-plugin",
     "ecosystem:jquery"
   ],
-  "main": "js/tinyselect.js",
+  "main": "src/tinyselect.js",
+  "scripts": {
+    "test:lint": "eslint src/tinyselect.js",
+    "test:qunit": "grunt test",
+    "test": "npm run test:lint && npm run test:qunit",
+    "demoserver": "http-server ./demo"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/McFizh/tinySelect.git"
   },
   "devDependencies": {
-    "grunt": "1.0.3",
-    "grunt-contrib-clean": "1.1.0",
-    "grunt-contrib-copy": "1.0.0",
-    "grunt-contrib-jshint": "1.1.0",
-    "grunt-contrib-qunit": "2.0.0",
-    "grunt-contrib-uglify": "3.3.0",
-    "qunitjs": "2.3.3"
+    "eslint": "^8.28.0",
+    "grunt": "^1.5.3",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-qunit": "^6.2.1",
+    "grunt-contrib-uglify": "^5.2.2",
+    "http-server": "^14.1.1",
+    "qunit": "^2.19.3"
   }
 }
