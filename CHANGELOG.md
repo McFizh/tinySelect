@@ -6,7 +6,8 @@ Code cleanup:
 - Added qunit test for latest jquery 3.6 and previous 3.5
 - Updated grunt & qunit packages
 - Replaced jshint with eslint
-- Updated travis node version from 8 to 14
+- Migrated from travis to github actions
+- Updated node version used in automated testing from 8 to 14
 - Added http-server page so that demo can be easily started
 - Moved source files to src directory
 
