@@ -1,7 +1,7 @@
 TinySelect
 ==========
 
-[![Known Vulnerabilities](https://snyk.io/test/github/McFizh/tinySelect.git/badge.svg)](https://snyk.io/test/github/McFizh/tinySelect.git)
+![Test](https://github.com/mcfizh/tinyselect/actions/workflows/test-workflow.yml/badge.svg)
 
 Tiny and zero-dependency jquery select component with ajax on demand loading and filtering. Supports jQuery versions 2 and 3
 
