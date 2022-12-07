@@ -3,6 +3,7 @@
 Code cleanup:
 
 - Dropped support for jquery 1
+- All var definitions have been change to either const or let
 - Added qunit test for latest jquery 3.6 and previous 3.5
 - Updated grunt & qunit packages
 - Replaced jshint with eslint

@@ -11,7 +11,7 @@
 
   "use strict";
 
-  var TinySelect = {
+  const TinySelect = {
     /* ******************************************************************* *
      * Class initializers
      * ******************************************************************* */
@@ -52,7 +52,7 @@
     },
 
     createSelect: function($el) {
-      var t_id;
+      let t_id;
 
       // Create container for select, search and options
       this.state.container = $("<div></div>").
@@ -98,17 +98,15 @@
     },
 
     createItems: function() {
-      var l1, opt;
-
       // Remove all
       this.state.itemContainer.empty();
 
       //
-      for(l1=0; l1<this.state.filteredItemData.length; l1++)
+      for(let l1=0; l1<this.state.filteredItemData.length; l1++)
       {
-        opt = this.state.filteredItemData[l1];
+        const opt = this.state.filteredItemData[l1];
 
-        var newLi = $("<li></li>").
+        const newLi = $("<li></li>").
           text( opt.text ).
           addClass( "item" ).
           attr( "data-value", opt.val );
@@ -139,10 +137,10 @@
     },
 
     readSelect: function($el) {
-      var self = this;
+      const self = this;
 
       $el.find("option").each(function(){
-        var opt = $(this);
+        const opt = $(this);
         self.state.originalItemData.push({ val: opt.val() , text: opt.text() });
       });
 
@@ -157,7 +155,7 @@
       if(this.state.searchContainer !== null)
         this.state.searchContainer.hide();
 
-      var newLi = $("<li></li>");
+      const newLi = $("<li></li>");
       if(!failure)
       {
         newLi.text( this.config.txtLoading ).
@@ -174,15 +172,15 @@
      * Event handlers
      * ******************************************************************* */
     onDocumentClicked: function(e) {
-      var self = e.data.self;
+      const self = e.data.self;
 
       if( self.state.open )
         self.onSelectBoxClicked(e);
     },
 
     onSearchKeyPress: function(e) {
-      var self = e.data.self,
-        sval = $(e.currentTarget).val();
+      const self = e.data.self;
+      let sval = $(e.currentTarget).val();
 
       // Convert search string to lowercase, if using case insensitive search
       if(!self.config.searchCaseSensitive)
@@ -206,7 +204,7 @@
     },
 
     onSelectBoxClicked: function(e) {
-      var self = e.data.self;
+      const self = e.data.self;
 
       // Do nothing, if currently animating
       if(self.state.dropdown.is(":animated"))
@@ -276,7 +274,7 @@
     },
 
     onSelectLiClicked: function(e) {
-      var self = e.data.self,
+      const self = e.data.self,
         item = $(e.currentTarget);
 
       self.state.dropdown.find("li").each(function() {
@@ -302,7 +300,7 @@
    * ******************************************************************* */
   $.fn.tinyselect = function(options) {
     return this.each(function(){
-      var sel = Object.create(TinySelect);
+      const sel = Object.create(TinySelect);
       sel.init( $(this) , options);
     });
   };
