@@ -3,7 +3,7 @@
  *
  * Licensed under MIT license.
  *
- * @version 2.0.0
+ * @version 2.0.1
  * @author Pekka Harjamäki
  */
 // eslint-disable-next-line no-extra-semi
@@ -52,14 +52,12 @@
     },
 
     createSelect: function($el) {
-      let t_id;
-
       // Create container for select, search and options
       this.state.container = $("<div></div>").
         addClass("tinyselect").
         css({ width: $el.css("width") });
 
-      t_id = $el.attr("id");
+      const t_id = $el.attr("id");
       if( t_id && t_id.length > 0 )
         this.state.container.attr("id",t_id+"_ts");
 
