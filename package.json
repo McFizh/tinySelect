@@ -12,7 +12,7 @@
     "jquery-plugin",
     "ecosystem:jquery"
   ],
-  "main": "src/tinyselect.js",
+  "main": "dist/js/tinyselect.min.js",
   "scripts": {
     "test:lint": "eslint src/tinyselect.js",
     "test:qunit": "grunt test",

@@ -1,13 +1,16 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <script src="http://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <script src="dist/js/tinyselect.min.js"></script>
 
-    <link rel="stylesheet" href="dist/css/tinyselect.css">
-  </head>
-  <body>
+<head>
+	<script src="http://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<script src="dist/js/tinyselect.min.js"></script>
 
-	This is just a basic select with static data. Search is case sensitive.<br/>
+	<link rel="stylesheet" href="dist/css/tinyselect.css">
+</head>
+
+<body>
+
+	This is just a basic select with static data. Search is case sensitive.<br />
 	<select id="select1">
 		<option value="-1">option a</option>
 		<option value="1">option b</option>
@@ -19,14 +22,14 @@
 		<option value="7">option h</option>
 	</select>
 
-	<br/><br/>
+	<br /><br />
 
-	This div is displayed after select component is created. This causes problems with jQuery outerWidth.<br/>
-	<br/>
+	This div is displayed after select component is created. This causes problems with jQuery outerWidth.<br />
+	<br />
 	<div id="havoc" style="width: 800px; border: 1px dashed black; display: none; padding: 5px;">
 
-	  This select doesn't have search<br/>
-	  <div style="width: 80%; display: inline-block;">
+		This select doesn't have search<br />
+		<div style="width: 80%; display: inline-block;">
 			<select id="select2" style="width: 100%;">
 				<option value="-1">option a</option>
 				<option value="1">option b</option>
@@ -37,27 +40,27 @@
 				<option value="6">option g</option>
 				<option value="7">option h</option>
 			</select>
-	  </div>
+		</div>
 
-	  <br/><br/>
-	  Data is loaded from file.json, component doesn't respect '---' selection and search is case insensitive.<br/>
-	  <div style="width: 80%; display: inline-block;">
+		<br /><br />
+		Data is loaded from file.json, component doesn't respect '---' selection and search is case insensitive.<br />
+		<div style="width: 80%; display: inline-block;">
 			<select id="select3">
 				<option value="-1">---</option>
 			</select>
-	  </div>
+		</div>
 
 	</div>
 
-	<br/>
-	Data is loaded from file.json .. component respects selection.<br/>
+	<br />
+	Data is loaded from file.json .. component respects selection.<br />
 	<select id="select5" style="width: 340px;">
 		<option value="1">abc</option>
 	</select>
 
-	<br/><br/>
+	<br /><br />
 
-	Note: This select is supposed to fail:<br/>
+	Note: This select is supposed to fail:<br />
 	<select id="select4">
 		<option value="-1">---</option>
 	</select>
@@ -65,10 +68,10 @@
 	<script>
 		/* This parser won't respect "---" selection */
 		const dataParserA = (data, selected) => {
-			retval = [ { val: "-1" , text: "---" } ];
+			retval = [{ val: "-1", text: "---" }];
 
-			data.forEach(function(v){
-				if(selected === "-1" && v.val === 3)
+			data.forEach((v) => {
+				if (selected === "-1" && v.val === 3)
 					v.selected = true;
 				retval.push(v);
 			});
@@ -78,23 +81,24 @@
 
 		/* This parser let's the component to handle selection */
 		const dataParserB = (data, selected) => {
-			retval = [ { val: "-1" , text: "---" } ];
-			data.forEach(function(v){ retval.push(v); });
+			retval = [{ val: "-1", text: "---" }];
+			data.forEach((v) => { retval.push(v); });
 			return retval;
 		}
 
 		/* Create select elements */
 		$("#select1").tinyselect();
 		$("#select2").tinyselect({ showSearch: false });
-		$("#select3").tinyselect({ searchCaseSensitive: false, dataUrl: "file.json" , dataParser: dataParserA });
+		$("#select3").tinyselect({ searchCaseSensitive: false, dataUrl: "file.json", dataParser: dataParserA });
 		$("#select4").tinyselect({ dataUrl: "failure.json" });
-		$("#select5").tinyselect({ dataUrl: "file.json" , dataParser: dataParserB });
+		$("#select5").tinyselect({ dataUrl: "file.json", dataParser: dataParserB });
 
-		$("#select2").on("change",() => {
+		$("#select2").on("change", () => {
 			console.log($(this).val());
 		});
 
 		$("#havoc").show()
 	</script>
-  </body>
+</body>
+
 </html>
