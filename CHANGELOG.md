@@ -1,6 +1,8 @@
-## 2.0.1 (x.x.2023)
+## 2.0.1 (1.8.2024)
 
-Updated (dev)dependencies
+- Updated (dev)dependencies
+- Dropped jquery 3.5 from tests and replaced it with jquery 3.7
+- Updated pipeline to use latest node version / actions
 
 ## 2.0.0 (30.11.2022)
 

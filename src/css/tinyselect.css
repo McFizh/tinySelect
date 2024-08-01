@@ -78,6 +78,7 @@
 	font-size: 10pt;
 	line-height: 2em;
 	padding: 0 5px;
+  box-sizing: border-box;
 }
 
 .tinyselect .dropdown .searchicon {

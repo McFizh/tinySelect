@@ -239,9 +239,7 @@
       self.state.ajaxPending = false;
 
       if(self.config.dataParser !== null )
-      {
         data = self.config.dataParser(data, self.state.selectedValue);
-      }
 
       self.state.$el.empty();
       data.forEach(function(v){
