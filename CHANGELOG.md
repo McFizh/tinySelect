@@ -1,5 +1,6 @@
 ## 2.0.1 (1.8.2024)
 
+- Added 'setDataUrl' command for the plugin
 - Updated (dev)dependencies
 - Dropped jquery 3.5 from tests and replaced it with jquery 3.7
 - Updated pipeline to use latest node version / actions

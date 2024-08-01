@@ -80,8 +80,7 @@
         this.createSearch(this.state.dropdown);
 
       // Create ul to hold items
-      this.state.itemContainer = $("<ul></ul>").
-        addClass("itemcontainer");
+      this.state.itemContainer = $("<ul></ul>").addClass("itemcontainer");
       this.state.dropdown.append(this.state.itemContainer);
 
       //
@@ -100,14 +99,9 @@
       this.state.itemContainer.empty();
 
       //
-      for(let l1=0; l1<this.state.filteredItemData.length; l1++)
+      for(const opt of this.state.filteredItemData)
       {
-        const opt = this.state.filteredItemData[l1];
-
-        const newLi = $("<li></li>").
-          text( opt.text ).
-          addClass( "item" ).
-          attr( "data-value", opt.val );
+        const newLi = $("<li></li>").text(opt.text).addClass("item").attr("data-value", opt.val);
 
         if( opt.val === this.state.selectedValue )
         {
@@ -144,6 +138,14 @@
 
       this.state.filteredItemData = this.state.originalItemData;
       this.state.selectedValue = $el.val();
+    },
+
+    loadData: function(url) {
+      const self = this;
+      self.setAjaxIndicator(false);
+      $.ajax({ url, dataType: "json", type: "GET" })
+        .done( function(data) { self.onAjaxLoadSuccess(self, data); } )
+        .fail( function() { self.onAjaxLoadError(self); } );
     },
 
     setAjaxIndicator: function(failure) {
@@ -219,23 +221,14 @@
 
       // Open selectbox
       if(self.config.dataUrl !== null)
-      {
-        self.setAjaxIndicator(false);
-        $.ajax({
-          url: self.config.dataUrl,
-          dataType: "json",
-          type: "GET"
-        })
-          .done( function(data) { self.onAjaxLoadSuccess(self, data); } )
-          .fail( function() { self.onAjaxLoadError(self); } );
-      }
+        self.loadData(self.config.dataUrl);
 
       self.state.open = true;
       self.state.selectBox.addClass("open");
       self.state.dropdown.slideDown(100);
     },
 
-    onAjaxLoadSuccess: function(self,data) {
+    onAjaxLoadSuccess: function(self, data) {
       self.state.ajaxPending = false;
 
       if(self.config.dataParser !== null )
@@ -243,25 +236,19 @@
 
       self.state.$el.empty();
       data.forEach(function(v){
-
         if(v.selected)
           self.state.selectedValue = v.val;
 
-        self.state.$el.append(
-
-          $("<option></option>").
-            text( v.text ).
-            val( v.val )
-        );
-
+        self.state.$el.append( $("<option></option>").text(v.text).val(v.val) );
       });
-      self.state.$el.val( self.state.selectedValue );
 
+      self.state.$el.val( self.state.selectedValue );
       self.state.originalItemData = data;
       self.state.filteredItemData = data;
 
       if(this.state.searchContainer !== null)
         this.state.searchContainer.show();
+
       self.createItems();
     },
 
@@ -270,8 +257,8 @@
     },
 
     onSelectLiClicked: function(e) {
-      const self = e.data.self,
-        item = $(e.currentTarget);
+      const self = e.data.self;
+      const item = $(e.currentTarget);
 
       self.state.dropdown.find("li").each(function() {
         $(this).removeClass("selected");
@@ -288,17 +275,32 @@
     /* ******************************************************************* *
      * External callbacks
      * ******************************************************************* */
-
+    onChangeDataUrl: function(newUrl) {
+      this.config.dataUrl = newUrl;
+    },
   };
 
   /* ******************************************************************* *
    * Plugin main
    * ******************************************************************* */
   $.fn.tinyselect = function(options) {
-    return this.each(function(){
-      const sel = Object.create(TinySelect);
-      sel.init( $(this) , options);
-    });
+    if(options === undefined || typeof options === "object") {
+      return this.each( function() {
+        const key = "plugin_tinySelect";
+        if(!$.data(this, key)) {
+          const sel = Object.create(TinySelect);
+          sel.init( $(this) , options);
+          $.data(this, key, sel);
+        }
+      });
+    } else if(typeof options === "string" && options === "setDataUrl") {
+      const args = arguments;
+      return this.each( function() {
+        const instance = $.data(this, "plugin_tinySelect");
+        if(instance && arguments[1])
+          instance.onChangeDataUrl(args[1]);
+      });
+    }
   };
 
 }(jQuery));

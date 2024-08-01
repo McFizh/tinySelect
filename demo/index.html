@@ -53,10 +53,13 @@
 	</div>
 
 	<br />
-	Data is loaded from file.json .. component respects selection.<br />
+	Data is loaded initially from "file1.json", use buttons below to change source .. component respects selection.<br />
 	<select id="select5" style="width: 340px;">
 		<option value="1">abc</option>
 	</select>
+  <br/>
+  <button id="select5src1" disabled>Change source to file 1</button>
+  <button id="select5src2">Change source to file 2</button>
 
 	<br /><br />
 
@@ -79,24 +82,39 @@
 			return retval;
 		}
 
-		/* This parser let's the component to handle selection */
+		/* This parser lets the component to handle selection */
 		const dataParserB = (data, selected) => {
 			retval = [{ val: "-1", text: "---" }];
-			data.forEach((v) => { retval.push(v); });
+      // Here we force all values to be of type string, so that selection works, since in the json file 'val'-values are actually numbers
+			data.forEach((v) => { retval.push({ val: v.val.toString(), text: v.text }); });
 			return retval;
 		}
 
-		/* Create select elements */
+		/* Create basic select elements */
 		$("#select1").tinyselect();
-		$("#select2").tinyselect({ showSearch: false });
-		$("#select3").tinyselect({ searchCaseSensitive: false, dataUrl: "file.json", dataParser: dataParserA });
+		$("#select3").tinyselect({ searchCaseSensitive: false, dataUrl: "file1.json", dataParser: dataParserA });
 		$("#select4").tinyselect({ dataUrl: "failure.json" });
-		$("#select5").tinyselect({ dataUrl: "file.json", dataParser: dataParserB });
 
-		$("#select2").on("change", () => {
+    /* Create select 2 with onChange event handler */
+		$("#select2").tinyselect({ showSearch: false });
+		$("#select2").on("change", function() {
 			console.log($(this).val());
 		});
 
+    /* Create select 5 with change source buttons */
+		const select5 = $("#select5").tinyselect({ dataUrl: "file1.json", dataParser: dataParserB });
+    $("#select5src1").on("click", function() {
+      $("#select5src1").attr("disabled", "disabled");
+      $("#select5src2").removeAttr("disabled");
+      $("#select5").tinyselect('setDataUrl', 'file1.json');
+    });
+    $("#select5src2").on("click", function() {
+      $("#select5src1").removeAttr("disabled");
+      $("#select5src2").attr("disabled", "disabled");
+      $("#select5").tinyselect("setDataUrl", "file2.json");
+    });
+
+    /* Finally show the hidden div that might cause layout issues */
 		$("#havoc").show()
 	</script>
 </body>
