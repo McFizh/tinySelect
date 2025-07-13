@@ -1,6 +1,6 @@
 ### Changelog
 
-- **3.0.0** - 14.7.2025
+- **3.0.0** - 13.7.2025
 
   - Dropped support for jquery 2
   - Updated eslint from 8 to 9 + dev dependency updates
