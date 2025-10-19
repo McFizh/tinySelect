@@ -1,5 +1,11 @@
 ### Changelog
 
+- **3.0.1** - 20.10.2025
+
+  - Added dev container support
+  - Replace grunt-qunit with puppeteer script
+  - Updated dev dependencies
+
 - **3.0.0** - 13.7.2025
 
   - Dropped support for jquery 2

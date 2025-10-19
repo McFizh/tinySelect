@@ -1,7 +1,7 @@
 {
   "name": "tinyselect",
   "description": "jQuery plugin to create custom select element. Supports ajax loading and filtering.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "Pekka Harjamäki <mcfizh@gmail.com>",
   "homepage": "https://mcfizh.github.io/tinySelect/",
   "license": "MIT",
@@ -15,13 +15,13 @@
   "main": "dist/js/tinyselect.min.js",
   "scripts": {
     "test:lint": "eslint src/tinyselect.js",
-    "test:qunit": "grunt test",
+    "test:qunit": "node run-tests.mjs",
     "test": "npm run test:lint && npm run test:qunit",
     "demoserver": "http-server ./demo"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/McFizh/tinySelect.git"
+    "url": "git+https://github.com/McFizh/tinySelect.git"
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",
@@ -30,9 +30,9 @@
     "grunt": "^1.5.3",
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-qunit": "^10.1.1",
     "grunt-contrib-uglify": "^5.2.2",
     "http-server": "^14.1.1",
+    "puppeteer": "^24.25.0",
     "qunit": "^2.19.3"
   }
 }

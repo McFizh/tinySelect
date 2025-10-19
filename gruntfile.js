@@ -1,4 +1,4 @@
-module.exports = function(grunt){
+module.exports = function (grunt) {
   "use strict";
 
   // ----------------------------------------------------
@@ -6,25 +6,26 @@ module.exports = function(grunt){
     pkg: grunt.file.readJSON("package.json"),
 
     clean: {
-      dist: ["dist"]
+      dist: ["dist"],
     },
 
     uglify: {
       options: {
         preserveComments: false,
-        banner: "/*\n" +
+        banner:
+          "/*\n" +
           " * tinySelect ( http://mcfizh.github.io/tinySelect/ )\n" +
           " *\n" +
           " * Licensed under MIT license.\n" +
           " *\n" +
           " * @version <%= pkg.version %>\n" +
           " * @author Pekka Harjamäki\n" +
-          " */"
+          " */",
       },
       main: {
         src: "src/tinyselect.js",
-        dest: "dist/js/tinyselect.min.js"
-      }
+        dest: "dist/js/tinyselect.min.js",
+      },
     },
 
     copy: {
@@ -33,21 +34,16 @@ module.exports = function(grunt){
         cwd: "src/",
         src: "css/*",
         dest: "dist",
-        filter: "isFile"
-      }
+        filter: "isFile",
+      },
     },
-    qunit: {
-      all: [ "tests/*.test.html" ]
-    }
   });
 
   // ----------------------------------------------------
-  grunt.loadNpmTasks( "grunt-contrib-clean" );
-  grunt.loadNpmTasks( "grunt-contrib-uglify" );
-  grunt.loadNpmTasks( "grunt-contrib-copy" );
-  grunt.loadNpmTasks( "grunt-contrib-qunit" );
+  grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
+  grunt.loadNpmTasks("grunt-contrib-copy");
 
   // ----------------------------------------------------
-  grunt.registerTask( "default", [ "clean:dist", "uglify:main", "copy:css" ] );
-  grunt.registerTask( "test", [ "qunit:all" ] );
+  grunt.registerTask("default", ["clean:dist", "uglify:main", "copy:css"]);
 };
