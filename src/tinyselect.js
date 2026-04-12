@@ -1,9 +1,9 @@
-/*
- * tinySelect
+/*!
+ * tinySelect ( https://mcfizh.github.io/tinySelect/ )
  *
  * Licensed under MIT license.
  *
- * @version 3.0.1
+ * @version 3.0.2
  * @author Pekka Harjamäki
  */
 ;(function ($) {

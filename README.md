@@ -48,4 +48,4 @@ Run the following commands:
 - npm ci
 - npm run test
   - This step is optional
-- npx grunt
+- npm run build
