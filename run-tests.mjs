@@ -7,12 +7,16 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 (async () => {
   const browser = await puppeteer.launch({
-    args: ["--disable-web-security"],
+    args: [
+      "--disable-web-security",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+    ],
   });
 
   const testDir = join(__dirname, "tests");
   const testFiles = readdirSync(testDir).filter((file) =>
-    file.endsWith(".html")
+    file.endsWith(".html"),
   );
 
   let totalTests = 0;
@@ -48,7 +52,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
   await browser.close();
 
   console.log(
-    `\nAll tests completed. Total: ${totalTests}, Failed: ${totalFailed}`
+    `\nAll tests completed. Total: ${totalTests}, Failed: ${totalFailed}`,
   );
 
   process.exit(totalFailed > 0 || totalTests === 0 ? 1 : 0);
