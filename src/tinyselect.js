@@ -3,7 +3,7 @@
  *
  * Licensed under MIT license.
  *
- * @version 3.0.2
+ * @version 3.1.0
  * @author Pekka Harjamäki
  */
 ;(function ($) {
@@ -20,6 +20,7 @@
       this.config = $.extend({
         showSearch: true,
         searchCaseSensitive: true,
+        searchDebounce: 100,
         txtLoading: "Loading...",
         txtAjaxFailure: "Error...",
 
@@ -40,10 +41,13 @@
         open: false,
         ajaxPending: false,
         selectedValue: -1,
+        searchDebounceTimer: null,
 
         originalItemData: [],
         filteredItemData: []
       };
+
+      this.state.disabled = $el.prop("disabled");
 
       this.readSelect($el);
       this.createSelect($el);
@@ -61,9 +65,16 @@
         this.state.container.attr("id", t_id + "_ts");
 
       // Create the select element
-      this.state.selectBox = $("<div></div>").
-        addClass("selectbox").
-        on("click", { self: this }, this.onSelectBoxClicked);
+      this.state.selectBox = $("<div></div>").addClass("selectbox");
+
+      if (this.state.disabled) {
+        this.state.selectBox.addClass("disabled");
+      } else {
+        this.state.selectBox.
+          attr("tabindex", "0").
+          on("click", { self: this }, this.onSelectBoxClicked).
+          on("keydown", { self: this }, this.onSelectBoxKeyDown);
+      }
 
       this.state.container.append(this.state.selectBox);
 
@@ -176,26 +187,42 @@
 
     onSearchKeyPress: function (e) {
       const self = e.data.self;
-      let sval = $(e.currentTarget).val();
 
-      // Convert search string to lowercase, if using case insensitive search
-      if (!self.config.searchCaseSensitive)
-        sval = sval.toLowerCase();
+      clearTimeout(self.state.searchDebounceTimer);
+      self.state.searchDebounceTimer = setTimeout(function () {
+        let sval = $(e.currentTarget).val();
 
-      if (sval.length === 0) {
-        self.state.filteredItemData = self.state.originalItemData;
-      } else {
-        self.state.filteredItemData = self.state.originalItemData.filter(function (item) {
-          // Case insensitive search
-          if (!self.config.searchCaseSensitive)
-            return item.text.toLowerCase().indexOf(sval) >= 0 ? true : false;
+        // Convert search string to lowercase, if using case insensitive search
+        if (!self.config.searchCaseSensitive)
+          sval = sval.toLowerCase();
 
-          // Case sensitive search
-          return item.text.indexOf(sval) >= 0 ? true : false;
-        });
+        if (sval.length === 0) {
+          self.state.filteredItemData = self.state.originalItemData;
+        } else {
+          self.state.filteredItemData = self.state.originalItemData.filter(function (item) {
+            // Case insensitive search
+            if (!self.config.searchCaseSensitive)
+              return item.text.toLowerCase().indexOf(sval) >= 0 ? true : false;
+
+            // Case sensitive search
+            return item.text.indexOf(sval) >= 0 ? true : false;
+          });
+        }
+
+        self.createItems();
+      }, self.config.searchDebounce);
+    },
+
+    onSelectBoxKeyDown: function (e) {
+      const self = e.data.self;
+      if (e.keyCode === 32 || e.keyCode === 13) {
+        e.preventDefault();
+        self.onSelectBoxClicked({ data: { self: self } });
+      } else if (e.keyCode === 27 && self.state.open) {
+        self.state.open = false;
+        self.state.selectBox.removeClass("open");
+        self.state.dropdown.slideUp(100);
       }
-
-      self.createItems();
     },
 
     onSelectBoxClicked: function (e) {
@@ -272,15 +299,22 @@
     onChangeDataUrl: function (newUrl) {
       this.config.dataUrl = newUrl;
     },
+
+    destroy: function () {
+      $(document).off("click", this.onDocumentClicked);
+      this.state.container.remove();
+      this.state.$el.show();
+    },
   };
 
   /* ******************************************************************* *
    * Plugin main
    * ******************************************************************* */
   $.fn.tinyselect = function (options) {
+        const key = "plugin_tinySelect";
+
     if (options === undefined || typeof options === "object") {
       return this.each(function () {
-        const key = "plugin_tinySelect";
         if (!$.data(this, key)) {
           const sel = Object.create(TinySelect);
           sel.init($(this), options);
@@ -288,11 +322,18 @@
         }
       });
     } else if (typeof options === "string" && options === "setDataUrl") {
-      const args = arguments;
       return this.each(function () {
-        const instance = $.data(this, "plugin_tinySelect");
+        const instance = $.data(this, key);
         if (instance && arguments[1])
-          instance.onChangeDataUrl(args[1]);
+          instance.onChangeDataUrl(arguments[1]);
+      });
+    } else if (typeof options === "string" && options === "destroy") {
+      return this.each(function () {
+        const instance = $.data(this, key);
+        if (instance) {
+          instance.destroy();
+          $.removeData(this, key);
+        }
       });
     }
   };

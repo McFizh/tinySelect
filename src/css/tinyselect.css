@@ -112,6 +112,16 @@
 	background-color: #eee;
 }
 
+.tinyselect .selectbox:focus-visible {
+	outline: 2px solid #1b6eab;
+	outline-offset: -2px;
+}
+
+.tinyselect .selectbox.disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
 .tinyselect .itemcontainer > li.item:hover {
 	background-color: #1b6eab;
 	color: white;

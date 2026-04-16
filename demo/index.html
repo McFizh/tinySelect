@@ -1,122 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="dist/js/tinyselect.min.js"></script>
 
-<head>
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-	<script src="dist/js/tinyselect.min.js"></script>
+    <link rel="stylesheet" href="dist/css/tinyselect.css" />
+  </head>
 
-	<link rel="stylesheet" href="dist/css/tinyselect.css">
-</head>
+  <body>
+    <h1>Basic search boxes</h1>
+    <p>Static data and search is case sensitive</p>
+    <select id="select1a">
+      <option value="-1">option a</option>
+      <option value="1">option b</option>
+      <option value="2">option c</option>
+      <option value="3">option d</option>
+      <option value="4">Option e</option>
+      <option value="5">option f</option>
+      <option value="6">option g</option>
+      <option value="7">option h</option>
+    </select>
 
-<body>
+    <p>Disabled state</p>
+    <select id="select1b" disabled>
+      <option value="-1">option a</option>
+      <option value="1">option b</option>
+    </select>
 
-	This is just a basic select with static data. Search is case sensitive.<br />
-	<select id="select1">
-		<option value="-1">option a</option>
-		<option value="1">option b</option>
-		<option value="2">option c</option>
-		<option value="3">option d</option>
-		<option value="4">Option e</option>
-		<option value="5">option f</option>
-		<option value="6">option g</option>
-		<option value="7">option h</option>
-	</select>
+    <br />
 
-	<br /><br />
+    <h1>This div is displayed after select component is created.</h1>
+    <p>Note: This causes problems with jQuery outerWidth.</p>
+    <div
+      id="havoc"
+      style="
+        width: 800px;
+        border: 1px dashed black;
+        display: none;
+        padding: 5px;
+      "
+    >
+      <p>This select doesn't have search</p>
+      <div style="width: 80%; display: inline-block">
+        <select id="select2" style="width: 100%">
+          <option value="-1">option a</option>
+          <option value="1">option b</option>
+          <option value="2" selected>option c</option>
+          <option value="3">option d</option>
+          <option value="4">option e</option>
+          <option value="5">option f</option>
+          <option value="6">option g</option>
+          <option value="7">option h</option>
+        </select>
+      </div>
 
-	This div is displayed after select component is created. This causes problems with jQuery outerWidth.<br />
-	<br />
-	<div id="havoc" style="width: 800px; border: 1px dashed black; display: none; padding: 5px;">
+      <br /><br />
+      <p>
+        Data is loaded from file.json, search is case insensitive and component
+        doesn't respect '---' selection.
+      </p>
+      <div style="width: 80%; display: inline-block">
+        <select id="select3">
+          <option value="-1">---</option>
+        </select>
+      </div>
+    </div>
 
-		This select doesn't have search<br />
-		<div style="width: 80%; display: inline-block;">
-			<select id="select2" style="width: 100%;">
-				<option value="-1">option a</option>
-				<option value="1">option b</option>
-				<option value="2" selected>option c</option>
-				<option value="3">option d</option>
-				<option value="4">option e</option>
-				<option value="5">option f</option>
-				<option value="6">option g</option>
-				<option value="7">option h</option>
-			</select>
-		</div>
+    <br />
+    <h1>Using ajax data source</h1>
+    <p>
+      Data is loaded initially from "file1.json", use buttons below to change
+      source. component respects selection.
+    </p>
+    <select id="select4" style="width: 340px">
+      <option value="1">abc</option>
+    </select>
+    <br />
+    <button id="select4src1" disabled>Change source to file 1</button>
+    <button id="select4src2">Change source to file 2</button>
 
-		<br /><br />
-		Data is loaded from file.json, component doesn't respect '---' selection and search is case insensitive.<br />
-		<div style="width: 80%; display: inline-block;">
-			<select id="select3">
-				<option value="-1">---</option>
-			</select>
-		</div>
+    <br />
 
-	</div>
+    <h1>Destroying pluging</h1>
+    <p>Note: This also shows how debounce works with delay set to 500ms</p>
+    <select id="select5">
+      <option value="1">Dog</option>
+      <option value="2">Cat</option>
+      <option value="3">Mouse</option>
+      <option value="4">Horse</option>
+    </select>
+    <br />
+    <button id="select5-destroy">Destroy plugin</button>
+    <button id="select5-create" disabled>Recreate plugin</button>
 
-	<br />
-	Data is loaded initially from "file1.json", use buttons below to change source .. component respects selection.<br />
-	<select id="select5" style="width: 340px;">
-		<option value="1">abc</option>
-	</select>
-  <br/>
-  <button id="select5src1" disabled>Change source to file 1</button>
-  <button id="select5src2">Change source to file 2</button>
+    <br />
 
-	<br /><br />
+    <h1>And finally a failing select</h1>
+    <p>
+      Note: This select is supposed to fail, because source file is not found
+    </p>
+    <select id="select6">
+      <option value="-1">---</option>
+    </select>
 
-	Note: This select is supposed to fail:<br />
-	<select id="select4">
-		<option value="-1">---</option>
-	</select>
+    <style type="text/css">
+      h1 {
+        font-size: 15pt;
+      }
+    </style>
 
-	<script>
-		/* This parser won't respect "---" selection */
-		const dataParserA = (data, selected) => {
-			retval = [{ val: "-1", text: "---" }];
+    <script>
+      /* This parser won't respect "---" selection */
+      const dataParserA = (data, selected) => {
+        retval = [{ val: "-1", text: "---" }];
 
-			data.forEach((v) => {
-				if (selected === "-1" && v.val === 3)
-					v.selected = true;
-				retval.push(v);
-			});
+        data.forEach((v) => {
+          if (selected === "-1" && v.val === 3) v.selected = true;
+          retval.push(v);
+        });
 
-			return retval;
-		}
+        return retval;
+      };
 
-		/* This parser lets the component to handle selection */
-		const dataParserB = (data, selected) => {
-			retval = [{ val: "-1", text: "---" }];
-      // Here we force all values to be of type string, so that selection works, since in the json file 'val'-values are actually numbers
-			data.forEach((v) => { retval.push({ val: v.val.toString(), text: v.text }); });
-			return retval;
-		}
+      /* This parser lets the component to handle selection */
+      const dataParserB = (data, selected) => {
+        retval = [{ val: "-1", text: "---" }];
+        // Here we force all values to be of type string, so that selection works, since in the json file 'val'-values are actually numbers
+        data.forEach((v) => {
+          retval.push({ val: v.val.toString(), text: v.text });
+        });
+        return retval;
+      };
 
-		/* Create basic select elements */
-		$("#select1").tinyselect();
-		$("#select3").tinyselect({ searchCaseSensitive: false, dataUrl: "file1.json", dataParser: dataParserA });
-		$("#select4").tinyselect({ dataUrl: "failure.json" });
+      /* Create basic select elements */
+      $("#select1a").tinyselect();
+      $("#select1b").tinyselect();
+      $("#select3").tinyselect({
+        searchCaseSensitive: false,
+        dataUrl: "file1.json",
+        dataParser: dataParserA,
+      });
+      $("#select6").tinyselect({ dataUrl: "failure.json" });
 
-    /* Create select 2 with onChange event handler */
-		$("#select2").tinyselect({ showSearch: false });
-		$("#select2").on("change", function() {
-			console.log($(this).val());
-		});
+      /* Create select 2 with onChange event handler */
+      $("#select2").tinyselect({ showSearch: false });
+      $("#select2").on("change", function () {
+        console.log($(this).val());
+      });
 
-    /* Create select 5 with change source buttons */
-		const select5 = $("#select5").tinyselect({ dataUrl: "file1.json", dataParser: dataParserB });
-    $("#select5src1").on("click", function() {
-      $("#select5src1").attr("disabled", "disabled");
-      $("#select5src2").removeAttr("disabled");
-      $("#select5").tinyselect('setDataUrl', 'file1.json');
-    });
-    $("#select5src2").on("click", function() {
-      $("#select5src1").removeAttr("disabled");
-      $("#select5src2").attr("disabled", "disabled");
-      $("#select5").tinyselect("setDataUrl", "file2.json");
-    });
+      /* Create select 4 with change source buttons */
+      $("#select4").tinyselect({
+        dataUrl: "file1.json",
+        dataParser: dataParserB,
+      });
+      $("#select4src1").on("click", function () {
+        $("#select4src1").attr("disabled", "disabled");
+        $("#select4src2").removeAttr("disabled");
+        $("#select4").tinyselect("setDataUrl", "file1.json");
+      });
+      $("#select4src2").on("click", function () {
+        $("#select4src1").removeAttr("disabled");
+        $("#select4src2").attr("disabled", "disabled");
+        $("#select4").tinyselect("setDataUrl", "file2.json");
+      });
 
-    /* Finally show the hidden div that might cause layout issues */
-		$("#havoc").show()
-	</script>
-</body>
+      /* Create select 5 with destroy/recreate actions */
+      const select5Opts = {
+        searchCaseSensitive: false,
+        searchDebounce: 500,
+      };
 
+      $("#select5").tinyselect(select5Opts);
+      $("#select5-destroy").on("click", function () {
+        $("#select5-destroy").attr("disabled", "disabled");
+        $("#select5-create").removeAttr("disabled");
+        $("#select5").tinyselect("destroy");
+      });
+      $("#select5-create").on("click", function () {
+        $("#select5-destroy").removeAttr("disabled");
+        $("#select5-create").attr("disabled", "disabled");
+        $("#select5").tinyselect(select5Opts);
+      });
+
+      /* Finally show the hidden div that might cause layout issues */
+      $("#havoc").show();
+    </script>
+  </body>
 </html>

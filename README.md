@@ -10,6 +10,7 @@ Tiny and zero-dependency jquery select component with ajax on demand loading and
 | ------------------- | ---------------------------------------------------------------------------------------- |
 | showSearch          | Show search box                                                                          |
 | searchCaseSensitive | Is search case sensitive (true / false)                                                  |
+| searchDebounce      | Debounce time for search (in ms, default 100ms)                                          |
 | txtLoading          | Text to show while loading ajax request                                                  |
 | txtAjaxFailure      | Text to show, if ajax loading fails                                                      |
 | dataUrl             | URL where to load content. If value is not set, plugin reads content from select element |

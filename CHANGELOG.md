@@ -1,5 +1,15 @@
 ### Changelog
 
+- **3.1.0** - xx.xx.2026
+
+  - Added destroy API method
+  - Added support for disabled state
+  - Added keyboard input debounce (default 100ms)
+  - Improved demo page + small improvements to keyboard navigation
+  - Plugin is now also tested with jQuery 4
+
+  Note: Also CSS files has changes, so if you have modified the dist css file, remember to port the changes.
+
 - **3.0.2** - 12.04.2026
 
   - Update dev dependencies
