@@ -1,4 +1,5 @@
 $("#select1").tinyselect({ searchDebounce: 0 });
+$("#select2").tinyselect({ searchDebounce: 0 });
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -29,4 +30,20 @@ QUnit.test("Structure creation", async (assert) => {
   el3.dispatchEvent(new Event("keyup"));
   await wait(50);
   assert.equal(el4.children.length, 1, "Search test2");
+});
+
+QUnit.test("Disabled state", async (assert) => {
+  const selectBox = document.querySelector("#select2_ts .selectbox");
+  assert.ok(document.querySelector("#select2_ts"), "Structure found");
+  assert.ok(
+    selectBox.classList.contains("disabled"),
+    "Select has disabled classs",
+  );
+  assert.notOk(selectBox.hasAttribute("tabindex"), "Should not have tabindex");
+
+  selectBox.click();
+  assert.notOk(
+    selectBox.classList.contains("open"),
+    "Should not open on click",
+  );
 });
