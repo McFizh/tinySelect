@@ -31,6 +31,12 @@ To change dataUrl, you can also call the plugin like so (once initialized):
 $("#selectElementId").tinyselect("setDataUrl", "new url goes here");
 ```
 
+And to remove the plugin and go back to default select, you can use destroy API method:
+
+```
+$("#selectElementId").tinyselect("destroy");
+```
+
 ### Ajax data format
 
 Plugin expects data to be array of objects. Each object should contain attributes 'val' and 'text'. Object can also contain attributes 'selected: true', which selects the element.
