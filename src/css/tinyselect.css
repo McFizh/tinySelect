@@ -122,6 +122,16 @@
 	opacity: 0.5;
 }
 
+.tinyselect .itemcontainer > li.item.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.tinyselect .itemcontainer > li.item.disabled:hover {
+	background-color: transparent;
+	color: inherit;
+}
+
 .tinyselect .itemcontainer > li.item:hover {
 	background-color: #1b6eab;
 	color: white;

@@ -3,7 +3,7 @@
  *
  * Licensed under MIT license.
  *
- * @version 3.1.0
+ * @version 3.2.0
  * @author Pekka Harjamäki
  */
 ;(function ($) {
@@ -65,7 +65,10 @@
         this.state.container.attr("id", t_id + "_ts");
 
       // Create the select element
-      this.state.selectBox = $("<div></div>").addClass("selectbox");
+      this.state.selectBox = $("<div></div>").addClass("selectbox").
+        attr("role", "combobox").
+        attr("aria-haspopup", "listbox").
+        attr("aria-expanded", "false");
 
       if (this.state.disabled) {
         this.state.selectBox.addClass("disabled");
@@ -90,7 +93,7 @@
         this.createSearch(this.state.dropdown);
 
       // Create ul to hold items
-      this.state.itemContainer = $("<ul></ul>").addClass("itemcontainer");
+      this.state.itemContainer = $("<ul></ul>").addClass("itemcontainer").attr("role", "listbox");
       this.state.dropdown.append(this.state.itemContainer);
 
       //
@@ -110,14 +113,21 @@
 
       //
       for (const opt of this.state.filteredItemData) {
-        const newLi = $("<li></li>").text(opt.text).addClass("item").attr("data-value", opt.val);
+        const newLi = $("<li></li>").text(opt.text).addClass("item").
+          attr("data-value", opt.val).
+          attr("role", "option").
+          attr("aria-selected", opt.val === this.state.selectedValue ? "true" : "false");
 
         if (opt.val === this.state.selectedValue) {
           this.state.selectBox.html(opt.text);
           newLi.addClass("selected");
         }
 
-        newLi.on("click", { self: this }, this.onSelectLiClicked);
+        if (opt.disabled) {
+          newLi.addClass("disabled").attr("aria-disabled", "true");
+        } else {
+          newLi.on("click", { self: this }, this.onSelectLiClicked);
+        }
 
         this.state.itemContainer.append(newLi);
       }
@@ -141,7 +151,7 @@
 
       $el.find("option").each(function () {
         const opt = $(this);
-        self.state.originalItemData.push({ val: opt.val(), text: opt.text() });
+        self.state.originalItemData.push({ val: opt.val(), text: opt.text(), disabled: opt.prop("disabled") });
       });
 
       this.state.filteredItemData = this.state.originalItemData;
@@ -175,6 +185,17 @@
       this.state.itemContainer.append(newLi);
     },
 
+    closeDropdown: function () {
+      this.state.open = false;
+      this.state.selectBox.removeClass("open").attr("aria-expanded", "false");
+      this.state.dropdown.slideUp(100);
+      if (this.state.searchBox !== null) {
+        this.state.searchBox.val("");
+        this.state.filteredItemData = this.state.originalItemData;
+        this.createItems();
+      }
+    },
+
     /* ******************************************************************* *
      * Event handlers
      * ******************************************************************* */
@@ -200,12 +221,9 @@
           self.state.filteredItemData = self.state.originalItemData;
         } else {
           self.state.filteredItemData = self.state.originalItemData.filter(function (item) {
-            // Case insensitive search
             if (!self.config.searchCaseSensitive)
-              return item.text.toLowerCase().indexOf(sval) >= 0 ? true : false;
-
-            // Case sensitive search
-            return item.text.indexOf(sval) >= 0 ? true : false;
+              return item.text.toLowerCase().includes(sval);
+            return item.text.includes(sval);
           });
         }
 
@@ -219,9 +237,7 @@
         e.preventDefault();
         self.onSelectBoxClicked({ data: { self: self } });
       } else if (e.keyCode === 27 && self.state.open) {
-        self.state.open = false;
-        self.state.selectBox.removeClass("open");
-        self.state.dropdown.slideUp(100);
+        self.closeDropdown();
       }
     },
 
@@ -234,9 +250,7 @@
 
       // Close selectBox
       if (self.state.open) {
-        self.state.open = false;
-        self.state.selectBox.removeClass("open");
-        self.state.dropdown.slideUp(100);
+        self.closeDropdown();
         return;
       }
 
@@ -245,7 +259,7 @@
         self.loadData(self.config.dataUrl);
 
       self.state.open = true;
-      self.state.selectBox.addClass("open");
+      self.state.selectBox.addClass("open").attr("aria-expanded", "true");
       self.state.dropdown.slideDown(100);
     },
 
@@ -260,7 +274,9 @@
         if (v.selected)
           self.state.selectedValue = v.val;
 
-        self.state.$el.append($("<option></option>").text(v.text).val(v.val));
+        const $opt = $("<option></option>").text(v.text).val(v.val);
+        if (v.disabled) $opt.prop("disabled", true);
+        self.state.$el.append($opt);
       });
 
       self.state.$el.val(self.state.selectedValue);
@@ -281,11 +297,9 @@
       const self = e.data.self;
       const item = $(e.currentTarget);
 
-      self.state.dropdown.find("li").each(function () {
-        $(this).removeClass("selected");
-      });
+      self.state.itemContainer.find(".selected").removeClass("selected").attr("aria-selected", "false");
 
-      item.addClass("selected");
+      item.addClass("selected").attr("aria-selected", "true");
       self.state.selectBox.html(item.text());
 
       self.state.selectedValue = item.attr("data-value");

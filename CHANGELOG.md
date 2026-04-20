@@ -1,7 +1,13 @@
 ### Changelog
 
-- **3.1.0** - 16.04.2026
+- **3.2.0** - 20.04.2026
+  - Added some initial ARIA attributes to improve accessability
+  - Added support for disabled select options
+  - Search is cleared when closing select
 
+  Note: More changes to css files, remember to port them if you have modified dist css file
+
+- **3.1.0** - 16.04.2026
   - Added destroy API method
   - Added support for disabled state
   - Added keyboard input debounce (default 100ms)
@@ -11,30 +17,25 @@
   Note: Also CSS file has changes, so if you have modified the dist css file, remember to port the changes.
 
 - **3.0.2** - 12.04.2026
-
   - Update dev dependencies
   - Replaced grunt with esbuild
 
 - **3.0.1** - 20.10.2025
-
   - Added dev container support
   - Replace grunt-qunit with puppeteer script
   - Updated dev dependencies
 
 - **3.0.0** - 13.7.2025
-
   - Dropped support for jquery 2
   - Updated eslint from 8 to 9 + dev dependency updates
 
 - **2.0.1** - 1.8.2024
-
   - Added 'setDataUrl' command for the plugin
   - Updated (dev)dependencies
   - Dropped jquery 3.5 from tests and replaced it with jquery 3.7
   - Updated pipeline to use latest node version / actions
 
 - **2.0.0** - 30.11.2022
-
   - Code cleanup:
 
   - Dropped support for jquery 1
@@ -48,7 +49,6 @@
   - Moved source files to src directory
 
 - **1.0.6** - 16.7.2018
-
   - Code cleanup:
 
   - Updated dev package versions
@@ -56,7 +56,6 @@
   - Replaces tabs from source
 
 - **1.0.5** - 9.7.2016
-
   - Bug fixes:
 
   - Text filtering can now be set as case sensitive or insensitive

@@ -21,15 +21,48 @@ QUnit.test("Structure creation", async (assert) => {
   assert.equal(el4.children.length, 8, "All children present in optionlist");
 
   // Wait is needed, otherwise debounce doesn't have time to do it's magic
+
+  // This should not return anything
   el3.value = "option 1";
   el3.dispatchEvent(new Event("keyup"));
   await wait(50);
-  assert.equal(el4.children.length, 0, "Search test1");
+  assert.equal(el4.children.length, 0, "Search should not return anything");
 
+  // This should return one item (enabled, selected)
   el3.value = "option a";
   el3.dispatchEvent(new Event("keyup"));
   await wait(50);
-  assert.equal(el4.children.length, 1, "Search test2");
+  assert.equal(
+    el4.children.length,
+    1,
+    "Search should return one item (enabled, selected)",
+  );
+  assert.ok(el4.children[0].classList.contains("selected"));
+  assert.notOk(el4.children[0].classList.contains("disabled"));
+
+  // This should return one item (enabled, not selected)
+  el3.value = "option b";
+  el3.dispatchEvent(new Event("keyup"));
+  await wait(50);
+  assert.equal(
+    el4.children.length,
+    1,
+    "Search should return one item (enabled, not selected)",
+  );
+  assert.notOk(el4.children[0].classList.contains("selected"));
+  assert.notOk(el4.children[0].classList.contains("disabled"));
+
+  // This should return one item (disabled)
+  el3.value = "option f";
+  el3.dispatchEvent(new Event("keyup"));
+  await wait(50);
+  assert.equal(
+    el4.children.length,
+    1,
+    "Search should return one item (disabled, not selected)",
+  );
+  assert.notOk(el4.children[0].classList.contains("selected"));
+  assert.ok(el4.children[0].classList.contains("disabled"));
 });
 
 QUnit.test("Disabled state", async (assert) => {
