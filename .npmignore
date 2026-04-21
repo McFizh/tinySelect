@@ -1,9 +1,10 @@
 .github
 .devcontainer
+.prettierrc
 .prettierignore
 node_modules
 tests
 eslint.config.mjs
-gruntfile.js
+esbuild.config.js
 run-tests.mjs
 demo
