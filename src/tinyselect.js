@@ -14,15 +14,14 @@
     /* ******************************************************************* *
      * Class initializers
      * ******************************************************************* */
-    init: function ($el, options) {
-      $el.data("tinySelectObj", this);
-
+    init: function ($el, options) {     
       this.config = $.extend({
         showSearch: true,
         searchCaseSensitive: true,
         searchDebounce: 100,
         txtLoading: "Loading...",
         txtAjaxFailure: "Error...",
+        ariaSearchLabel: "Search options",
 
         dataUrl: null,
         dataParser: null
@@ -32,9 +31,11 @@
         container: null,
         selectBox: null,
         itemContainer: null,
+        listboxId: null,
 
         searchContainer: null,
         searchBox: null,
+        searchStatus: null,
 
         $el: null,
 
@@ -63,6 +64,8 @@
       const t_id = $el.attr("id");
       if (t_id && t_id.length > 0)
         this.state.container.attr("id", t_id + "_ts");
+
+      this.state.listboxId = (t_id && t_id.length > 0 ? t_id + "_ts" : "ts_" + Math.random().toString(36).slice(2, 7)) + "_lb";
 
       // Create the select element
       this.state.selectBox = $("<div></div>").addClass("selectbox").
@@ -93,7 +96,7 @@
         this.createSearch(this.state.dropdown);
 
       // Create ul to hold items
-      this.state.itemContainer = $("<ul></ul>").addClass("itemcontainer").attr("role", "listbox");
+      this.state.itemContainer = $("<ul></ul>").addClass("itemcontainer").attr("role", "listbox").attr("id", this.state.listboxId);
       this.state.dropdown.append(this.state.itemContainer);
 
       //
@@ -138,11 +141,20 @@
         addClass("searchcontainer");
       this.state.searchBox = $("<input type='text'></input>").
         addClass("searchbox").
+        attr("aria-label", this.config.ariaSearchLabel).
+        attr("aria-autocomplete", "list").
+        attr("aria-controls", this.state.listboxId).
         on("click", function (e) { e.stopPropagation(); }).
         on("keyup", { self: this }, this.onSearchKeyPress);
 
+      this.state.searchStatus = $("<div></div>").
+        addClass("sr-only").
+        attr("aria-live", "polite").
+        attr("aria-atomic", "true");
+
       this.state.searchContainer.append($("<span class='searchicon'></span>"));
       this.state.searchContainer.append(this.state.searchBox);
+      this.state.searchContainer.append(this.state.searchStatus);
       this.state.dropdown.append(this.state.searchContainer);
     },
 
@@ -162,8 +174,8 @@
       const self = this;
       self.setAjaxIndicator(false);
       $.ajax({ url, dataType: "json", type: "GET" })
-        .done(function (data) { self.onAjaxLoadSuccess(self, data); })
-        .fail(function () { self.onAjaxLoadError(self); });
+        .done(function (data) { self.onAjaxLoadSuccess(data); })
+        .fail(function () { self.onAjaxLoadError(); });
     },
 
     setAjaxIndicator: function (failure) {
@@ -228,6 +240,11 @@
         }
 
         self.createItems();
+
+        if (self.state.searchStatus !== null) {
+          const n = self.state.filteredItemData.length;
+          self.state.searchStatus.text(sval.length === 0 ? "" : n + (n === 1 ? " result" : " results"));
+        }
       }, self.config.searchDebounce);
     },
 
@@ -255,42 +272,43 @@
       }
 
       // Open selectbox
-      if (self.config.dataUrl !== null)
+      if (self.config.dataUrl !== null) {
         self.loadData(self.config.dataUrl);
+      }
 
       self.state.open = true;
       self.state.selectBox.addClass("open").attr("aria-expanded", "true");
       self.state.dropdown.slideDown(100);
     },
 
-    onAjaxLoadSuccess: function (self, data) {
-      self.state.ajaxPending = false;
+    onAjaxLoadSuccess: function (data) {
+      this.state.ajaxPending = false;
 
-      if (self.config.dataParser !== null)
-        data = self.config.dataParser(data, self.state.selectedValue);
+      if (this.config.dataParser !== null)
+        data = this.config.dataParser(data, this.state.selectedValue);
 
-      self.state.$el.empty();
-      data.forEach(function (v) {
+      this.state.$el.empty();
+      data.forEach((v) => {
         if (v.selected)
-          self.state.selectedValue = v.val;
+          this.state.selectedValue = v.val;
 
         const $opt = $("<option></option>").text(v.text).val(v.val);
         if (v.disabled) $opt.prop("disabled", true);
-        self.state.$el.append($opt);
+        this.state.$el.append($opt);
       });
 
-      self.state.$el.val(self.state.selectedValue);
-      self.state.originalItemData = data;
-      self.state.filteredItemData = data;
+      this.state.$el.val(this.state.selectedValue);
+      this.state.originalItemData = data;
+      this.state.filteredItemData = data;
 
       if (this.state.searchContainer !== null)
         this.state.searchContainer.show();
 
-      self.createItems();
+      this.createItems();
     },
 
-    onAjaxLoadError: function (self) {
-      self.setAjaxIndicator(true);
+    onAjaxLoadError: function () {
+      this.setAjaxIndicator(true);
     },
 
     onSelectLiClicked: function (e) {
@@ -325,7 +343,7 @@
    * Plugin main
    * ******************************************************************* */
   $.fn.tinyselect = function (options) {
-        const key = "plugin_tinySelect";
+    const key = "plugin_tinySelect";
 
     if (options === undefined || typeof options === "object") {
       return this.each(function () {
@@ -336,10 +354,13 @@
         }
       });
     } else if (typeof options === "string" && options === "setDataUrl") {
+      // Arguments need to be extracted here, the value of arguments is different inside the loop
+      const args = arguments;
+
       return this.each(function () {
         const instance = $.data(this, key);
-        if (instance && arguments[1])
-          instance.onChangeDataUrl(arguments[1]);
+        if (instance && args[1])
+          instance.onChangeDataUrl(args[1]);
       });
     } else if (typeof options === "string" && options === "destroy") {
       return this.each(function () {

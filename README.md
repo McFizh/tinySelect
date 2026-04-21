@@ -13,6 +13,7 @@ Tiny and zero-dependency jquery select component with ajax on demand loading and
 | searchDebounce      | Debounce time for search (in ms, default 100ms)                                          |
 | txtLoading          | Text to show while loading ajax request                                                  |
 | txtAjaxFailure      | Text to show, if ajax loading fails                                                      |
+| ariaSearchLabel     | Aria label for search box (only for screen readers)                                      |
 | dataUrl             | URL where to load content. If value is not set, plugin reads content from select element |
 | dataParser          | Custom function to parse data from ajax request                                          |
 

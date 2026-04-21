@@ -1,8 +1,9 @@
 ### Changelog
 
-- **3.2.0** - 20.04.2026
+- **3.2.0** - 21.04.2026
   - Added some initial ARIA attributes to improve accessability
   - Added support for disabled select options
+  - Fixed regression bug with setDataUrl
   - Search is cleared when closing select
 
   Note: More changes to css files, remember to port them if you have modified dist css file
